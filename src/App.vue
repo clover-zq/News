@@ -7,6 +7,10 @@
 <style lang="less">
 // 公共样式
 @import url("//at.alicdn.com/t/font_1426139_jm7n2373nlh.css");
+@import url("../node_modules/vant/lib/index");
+body {
+  background-color: #f2f2f2;
+}
 * {
   margin: 0;
   padding: 0;

@@ -10,7 +10,8 @@
       <span class="iconfont iconnew"></span>
     </div>
 
-    <!-- 使用vant表单 -->
+    <!-- 使用vant的表单 -->
+    <!-- van-form是表单的组件， @submit是表单按钮提交的事件 -->
     <van-form @submit="onSubmit" class="form">
       <!-- van-field是表单的字段 -->
       <!-- rules是表单字段的规则，required表示这个输入框是必填 -->
@@ -19,6 +20,13 @@
         name="手机号码"
         placeholder="手机号码"
         :rules="[{ required: true, message: '请填写手机号码' }]"
+      />
+      <!-- 昵称的输入框 -->
+      <van-field
+        v-model="form.nickname"
+        name="昵称"
+        placeholder="请输入昵称"
+        :rules="[{ required: true, message: '请填写昵称' }]"
       />
       <!-- 密码输入框，和上面的属性是一样的 -->
       <van-field
@@ -31,12 +39,11 @@
       <div>
         <!-- 如果这个按钮是在van-form组件内部，
         并且按钮的native-type="submit"，说明点击这个按钮就会触发submit事件-->
-        <van-button round block type="info" native-type="submit">登录</van-button>
+        <van-button round block type="info" native-type="submit">注册</van-button>
       </div>
     </van-form>
-    <!-- 去注册按钮 -->
-    <router-link to="/register">
-      <van-button round block class="link-register">注册</van-button>
+    <router-link to="/login">
+      <van-button round block class="link-register">登录</van-button>
     </router-link>
   </div>
 </template>
@@ -47,18 +54,29 @@ export default {
     return {
       form: {
         username: "",
+        nickname: "",
         password: ""
       }
     };
   },
   methods: {
+    // 提交表单时候触发的事件，该事件通过校验才会触发
+    // values是表单返回的值，这里的values我们用不上，数据可以在this.form里面拿
     onSubmit(values) {
+      // 调用axios发起异步请求，类似$.ajax(类似不代表一样)
       this.$axios({
-        url: "/login",
+        // 接口地址
+        url: "/register",
+        // 声明请求的方法为post请求(一定要注册这个method没有s)
+        // 跟vue的methods属性毫无关系
         method: "POST",
+        // 参数
         data: this.form
+        // .then方法里面的函数就是成功的回调函数,axios没有succces
       }).then(res => {
+        // 获取到返回的信息
         const { message } = res.data;
+        // 使用vant的弹窗提示用，success表示成功的弹窗
         this.$toast.success(message);
       });
     }
@@ -69,10 +87,8 @@ export default {
 <style lang="less" scoped>
 .container {
   padding: 20 / 360 * 100vw;
-  background-color: #f2f2f2;
   .back-btn span {
-    font-size: 27/360 * 100vw;
-    color: #757575;
+    font-size: 27 / 360 * 100vw;
     line-height: 1;
   }
   .logo {
@@ -90,10 +106,12 @@ export default {
       margin-bottom: 20 / 360 * 100vw;
       background-color: #f2f2f2;
     }
+
     .van-cell:not(:last-child)::after {
       border-bottom: 1px solid #333;
       left: 0;
     }
+
     .van-button--info {
       margin-top: 50 / 360 * 100vw;
       background-color: #cc3300;
@@ -101,7 +119,7 @@ export default {
     }
   }
   .link-register {
-    margin-top: 20/360 * 100vw;
+    margin-top: 20 / 360 * 100vw;
   }
 }
 </style>
