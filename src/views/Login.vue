@@ -58,8 +58,12 @@ export default {
         method: "POST",
         data: this.form
       }).then(res => {
-        const { message } = res.data;
+        const { message, data } = res.data;
         this.$toast.success(message);
+        //把登录时的token保存到本地存储
+        localStorage.setItem("userInfo", JSON.stringify(data));
+        //登录成功跳转个人中心页
+        this.$router.push("/personal");
       });
     }
   }
@@ -71,7 +75,7 @@ export default {
   padding: 20 / 360 * 100vw;
   background-color: #f2f2f2;
   .back-btn span {
-    font-size: 27/360 * 100vw;
+    font-size: 27 / 360 * 100vw;
     color: #757575;
     line-height: 1;
   }
