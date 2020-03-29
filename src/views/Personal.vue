@@ -3,7 +3,7 @@
     <!-- 头部导航条 -->
     <NavigateBar title="个人中心" :showHome="true"></NavigateBar>
     <!-- 头部 -->
-    <div class="header">
+    <div class="header" @click="editUrl">
       <div class="avater">
         <img :src="$axios.defaults.baseURL + userInfo.head_img" alt />
       </div>
@@ -74,6 +74,9 @@ export default {
     });
   },
   methods: {
+    editUrl() {
+      this.$router.push("/edit-profile");
+    },
     //退出按钮
     handleClick() {
       this.$dialog
