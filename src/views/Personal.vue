@@ -1,14 +1,7 @@
 <template>
   <div class="container">
-    <!-- 顶部的导航条 -->
-    <div class="navigate-bar">
-      <!-- $router.back()是实例下的属性，可以直接在模板中渲染 -->
-      <span class="iconfont iconjiantou2" @click="$router.back()"></span>
-      <strong>个人中心</strong>
-      <!-- $router.push()是实例下的属性，可以直接在模板中渲染 -->
-      <span class="iconfont iconshouye" @click="$router.push('/')"></span>
-    </div>
-
+    <!-- 头部导航条 -->
+    <NavigateBar title="个人中心" :showHome="true"></NavigateBar>
     <!-- 头部 -->
     <div class="header">
       <div class="avater">
@@ -38,6 +31,8 @@
 //导入列表按纽栏的组件，import后面接上组件变量名
 // @代表src目录
 import Listbar from "@/components/Listbar";
+//引入顶部导航条组件
+import NavigateBar from "@/components/NavigateBar";
 
 //引入momentjs工具库
 import moment from "moment";
@@ -45,7 +40,8 @@ import moment from "moment";
 export default {
   //注册组件
   components: {
-    Listbar
+    Listbar,
+    NavigateBar
   },
   data() {
     return {
@@ -100,19 +96,6 @@ export default {
 </script>
 
 <style lang="less" scoped>
-// 顶部导航条样式
-.navigate-bar {
-  line-height: 40 / 360 * 100vw;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 10 / 360 * 100vw;
-  border-bottom: 1px #ddd solid;
-
-  .iconshouye {
-    font-size: 20px;
-  }
-}
 // 头部样式
 .header {
   display: flex;
