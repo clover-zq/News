@@ -7,7 +7,8 @@ const routes = [
   { path: '/login', component: () => import("@/views/Login") },
   { path: '/register', component: () => import("@/views/Register") },
   { path: '/personal', component: () => import("@/views/Personal") },
-  { path: '/edit-profile', component: () => import("@/views/EditProfile") }
+  { path: '/edit-profile', component: () => import("@/views/EditProfile") },
+  { path: '/follow', component: () => import("@/views/Follow") },
 
 
 ]

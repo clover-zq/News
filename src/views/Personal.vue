@@ -21,7 +21,13 @@
         <span class="iconfont iconjiantou1 arrow"></span>
       </div>
     </div>
-    <Listbar v-for="(item,index) in rows" :key="index" :label="item.label" :tips="item.tips" />
+    <Listbar
+      v-for="(item,index) in rows"
+      :key="index"
+      :label="item.label"
+      :tips="item.tips"
+      :path="item.path"
+    />
     <!-- click.native这个事件类型，会给Listbar这个徐建最外部的div强制绑定点击事件 -->
     <Listbar label="退出" @click.native="handleClick" />
   </div>
@@ -46,9 +52,9 @@ export default {
   data() {
     return {
       rows: [
-        { label: "我的关注", tips: "关注的用户" },
-        { label: "我的跟帖", tips: "跟帖回复" },
-        { label: "我的收藏", tips: "文章/视频" },
+        { label: "我的关注", tips: "关注的用户", path: "/follow" },
+        { label: "我的跟帖", tips: "跟帖回复", path: "/comments" },
+        { label: "我的收藏", tips: "文章/视频", path: "/star" },
         { label: "设置", tips: "" }
       ],
       userInfo: {},
@@ -81,8 +87,8 @@ export default {
     handleClick() {
       this.$dialog
         .confirm({
-          title: "标题",
-          message: "弹窗内容"
+          title: "提示",
+          message: "确定退出吗？"
         })
         .then(() => {
           // on confirm
