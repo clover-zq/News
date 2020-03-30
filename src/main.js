@@ -16,10 +16,6 @@ Vue.use(Vant);
 
 Vue.config.productionTip = false;
 
-new Vue({
-  router,
-  render: h => h(App)
-}).$mount('#app')
 
 // 添加路由的守卫
 router.beforeEach((to, from, next) => {
@@ -44,4 +40,13 @@ router.beforeEach((to, from, next) => {
 
 
 })
+
+
+
+new Vue({
+  router,
+  render: h => h(App)
+}).$mount('#app')
+
+
 

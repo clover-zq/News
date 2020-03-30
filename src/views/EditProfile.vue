@@ -117,7 +117,7 @@ export default {
     },
     //封装编辑用户信息的函数
     handleEdit(data) {
-      this.$axios({
+      return this.$axios({
         method: "POST",
         url: "/user_update/" + this.userInfo.id,
         //设置一个请求头
@@ -133,25 +133,35 @@ export default {
         this.$toast.success(message);
       });
     },
+    //修改昵称
     handleChangeNickname() {
-      this.handleEdit({
+      const request = this.handleEdit({
         nickname: this.nickname
       });
-      this.userInfo.nickname = this.nickname;
-    },
-    handleChangePassword() {
-      this.handleEdit({
-        password: this.password
+      request.then(() => {
+        this.userInfo.nickname = this.nickname;
       });
     },
+    //修改密码
+    handleChangePassword() {
+      const request = this.handleEdit({
+        password: this.password
+      });
+      request.then(() => {
+        this.userInfo.password = this.password;
+      });
+    },
+    //修改性别
     onSelect(item) {
       // 默认情况下点击选项时不会自动收起
       // 可以通过 close-on-click-action 属性开启自动收起
       console.log(item);
-      this.handleEdit({
+      const request = this.handleEdit({
         gender: item.gender
       });
-      this.userInfo.gender = item.vlue;
+      request.then(() => {
+        this.userInfo.gender = item.vlue;
+      });
     }
   }
 };
