@@ -53,7 +53,7 @@ export default {
     return {
       rows: [
         { label: "我的关注", tips: "关注的用户", path: "/follow" },
-        { label: "我的跟帖", tips: "跟帖回复", path: "/comments" },
+        { label: "我的跟帖", tips: "跟帖回复", path: "/comment" },
         { label: "我的收藏", tips: "文章/视频", path: "/star" },
         { label: "设置", tips: "" }
       ],

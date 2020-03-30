@@ -58,10 +58,10 @@ export default {
 };
 </script>
 
-<stylelang="less" scoped >
+<style lang="less" scoped >
 .comment-item {
   padding: 20/360 * 100vw;
-  border-bottom: 1px #eee solid;
+  border-bottom: 1px #dedede solid;
 
   .date {
     color: #999;
