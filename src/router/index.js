@@ -9,6 +9,7 @@ const routes = [
   { path: '/personal', component: () => import("@/views/Personal") },
   { path: '/edit-profile', component: () => import("@/views/EditProfile") },
   { path: '/follow', component: () => import("@/views/Follow") },
+  { path: '/comment', component: () => import("@/views/Comment") },
 
 
 ]
