@@ -5,12 +5,12 @@ Vue.use(VueRouter)
 
 const routes = [
   { path: '/login', component: () => import("@/views/Login") },
-  { path: '/register', component: () => import("@/views/Register") },
-  { path: '/personal', component: () => import("@/views/Personal") },
-  { path: '/edit-profile', component: () => import("@/views/EditProfile") },
-  { path: '/follow', component: () => import("@/views/Follow") },
-  { path: '/comment', component: () => import("@/views/Comment") },
-  { path: '/star', component: () => import("@/views/Star") },
+  { path: '/register', component: () => import("@/views/Register"), meta: { authorization: true } },
+  { path: '/personal', component: () => import("@/views/Personal"), meta: { authorization: true } },
+  { path: '/edit-profile', component: () => import("@/views/EditProfile"), meta: { authorization: true } },
+  { path: '/follow', component: () => import("@/views/Follow"), meta: { authorization: true } },
+  { path: '/comment', component: () => import("@/views/Comment"), meta: { authorization: true } },
+  { path: '/star', component: () => import("@/views/Star"), meta: { authorization: true } },
 
 
 ]
