@@ -4,6 +4,7 @@ import VueRouter from 'vue-router'
 Vue.use(VueRouter)
 
 const routes = [
+  { path: '/', component: () => import("@/views/Index") },
   { path: '/login', component: () => import("@/views/Login") },
   { path: '/register', component: () => import("@/views/Register"), meta: { authorization: true } },
   { path: '/personal', component: () => import("@/views/Personal"), meta: { authorization: true } },
