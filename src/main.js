@@ -5,6 +5,8 @@ import router from './router';
 import Vant from 'vant';
 //导入axios
 import axios from "axios";
+//引入vant ui组件库
+import vant, { Toast } from 'vant'
 
 // 绑定到原型，加上之后以后就可以在组件中通过this.$axios来调用请求方法
 Vue.prototype.$axios = axios;
@@ -42,6 +44,18 @@ router.beforeEach((to, from, next) => {
 
 })
 
+//axios的响应拦截器
+axios.interceptors.response.use(res => {
+  // Do something before request is sent
+  return res;
+}, error => {
+  // Do something with request error
+  const { statusCode, message } = error.response.data;
+  if (statusCode === 400) {
+    Toast.fail(message);
+  }
+  return Promise.reject(error);
+});
 
 
 new Vue({
