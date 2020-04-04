@@ -1,6 +1,6 @@
 <template>
-  <div class="container">
-    <!-- 首页头部 -->
+  <div>
+    <!-- 红色的头部 -->
     <div class="header">
       <span class="iconfont iconnew"></span>
       <router-link to="#" class="search">
@@ -11,12 +11,13 @@
         <span class="iconfont iconwode"></span>
       </router-link>
     </div>
+
     <!-- tab栏切换 -->
+    <!-- v-model：就是当前的索引值，是唯一的，比较类似于for循环的key -->
+    <!-- sticky：是否使用粘性定位布局 -->
+    <!-- swipeable: 是否开启手势滑动切换 -->
     <van-tabs v-model="active" sticky swipeable>
-      <van-tab v-for="(item, index) in categories" :key="index" :title="item.name">
-        <!-- <div>
-          <p>内容 {{ index }}</p>
-        </div>-->
+      <van-tab v-for="(item, index) in categories" :key="index" :title="item">
         <!-- 下拉刷新 -->
         <van-pull-refresh v-model="refreshing" @refresh="onRefresh">
           <!-- van的列表组件 -->
@@ -25,7 +26,7 @@
             <!-- 假设list是后台返回的数组，里有10个元素 -->
             <div v-for="(item, index) in list" :key="index">
               <!-- 只有单张图片的 -->
-              <!-- <PostItem1 /> -->
+              <PostItem1 />
               {{index}}
             </div>
           </van-list>
@@ -46,14 +47,29 @@ import PostItem3 from "@/components/PostItem3";
 export default {
   data() {
     return {
-      categories: [],
+      // 菜单的数据
+      categories: [
+        "关注",
+        "娱乐",
+        "体育",
+        "汽车",
+        "房产",
+        "关注",
+        "关注",
+        "娱乐",
+        "体育",
+        "汽车",
+        "房产",
+        "关注",
+        "∨"
+      ],
+      // 记录当前tab的切换的索引
       active: 0,
-      list: [],
-      loading: false,
-      finished: false,
-      refreshing: false,
-      token: ""
-      // categoryId: 999
+      // 假设这个数组是后台返回的数据
+      list: [1, 1, 1, 1, 1, 1, 1, 1, 1, 1], // 10个1
+      loading: false, // 是否正在加载中
+      finished: false, // 是否已经加载完毕
+      refreshing: false // 是否正在下拉加载
     };
   },
   // 监听属性
@@ -71,61 +87,7 @@ export default {
     PostItem2,
     PostItem3
   },
-  mounted() {
-    //渲染栏目列表
-    // 获取本地的token
-    const { token } = JSON.parse(localStorage.getItem("userInfo")) || {};
-
-    // console.log(token);
-    this.token = token;
-    //获取本地的栏目数据
-
-    const categories = JSON.parse(localStorage.getItem("categories"));
-    console.log(categories);
-    //如果token有值，说明当前是登录状态
-    if (categories) {
-      //如果是登录状态，但是栏目第一项不是‘关注’，需要重新请求栏目数据
-      //如果当前为登录，但是栏目第一项是‘关注’，需要重新请求栏目数据
-      if (
-        (token && categories[0].name !== "关注") ||
-        (!token && categories[0].name === "关注")
-      ) {
-        this.getCategories();
-      } else {
-        //如果在登录状态下，本地有数据或者非登录状态下本地有数据就要把本地数据传给data直接渲染
-        this.categories = categories;
-      }
-    } else {
-      this.getCategories();
-    }
-    // this.getCategories();
-  },
   methods: {
-    //封装一个请求栏目数据的函数getCategories
-    getCategories() {
-      const config = {
-        url: "/category"
-      };
-      //如果token有值，给请求配置加上headers
-      if (this.token) {
-        config.headers = {
-          Authorization: this.token
-        };
-      }
-      this.$axios(config).then(res => {
-        // console.log(res);
-        const { data } = res.data;
-        data.push({
-          name: "∨"
-        });
-        this.categories = data;
-        //保存到本地存储
-        // localStorage.setItem("categories", JSON.stringify(data));
-        console.log(data);
-        localStorage.setItem("categories", JSON.stringify(data));
-        // console.log(localStorage.getItem("categories"));
-      });
-    },
     onLoad() {
       console.log("已经拖动到了底部");
       // 异步更新数据
@@ -153,7 +115,7 @@ export default {
 };
 </script>
 
-<style lang="less" scoped>
+<style scoped lang="less">
 .header {
   height: 50/360 * 100vw;
   background: #ff0000;

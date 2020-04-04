@@ -6,18 +6,17 @@ import Vant from 'vant';
 //导入axios
 import axios from "axios";
 //引入vant ui组件库
-import vant, { Toast } from 'vant'
+import vant, { Toast } from 'vant';
 
 // 绑定到原型，加上之后以后就可以在组件中通过this.$axios来调用请求方法
 Vue.prototype.$axios = axios;
 
 // 给axios添加基准路径，添加完了之后请求的url就会拼接这个地址
-axios.defaults.baseURL = "http://localhost:3000"
+axios.defaults.baseURL = "http://localhost:3000";
 
 Vue.use(Vant);
 
 Vue.config.productionTip = false;
-
 
 // 添加路由的守卫
 router.beforeEach((to, from, next) => {
@@ -40,8 +39,6 @@ router.beforeEach((to, from, next) => {
     // 非个人中心页
     next();
   }
-
-
 })
 
 //axios的响应拦截器
@@ -58,10 +55,20 @@ axios.interceptors.response.use(res => {
 });
 
 
+// new Vue({
+//   router,
+//   render: h => h(App)
+// }).$mount('#app')
+
+// 创建一个根实例
+// .$mount('#app') 相当于el配置，指定id为app的元素作为模板
 new Vue({
+  // 路由对象
   router,
+  // 加载第一个子组件，最底层的组件，（写法是固定的）
   render: h => h(App)
 }).$mount('#app')
+
 
 
 

@@ -2,7 +2,9 @@
   <div class="container">
     <!-- 返回上一页按钮 -->
     <div class="back-btn">
-      <span class="iconfont iconicon-test"></span>
+      <router-link to="/">
+        <span class="iconfont iconicon-test"></span>
+      </router-link>
     </div>
 
     <!-- logo -->
