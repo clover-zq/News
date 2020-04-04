@@ -21,12 +21,22 @@
         <van-pull-refresh v-model="refreshing" @refresh="onRefresh">
           <!-- van的列表组件 -->
           <!-- @load 滚动到底部时候触发的函数 -->
-          <van-list v-model="loading" :finished="finished" finished-text="我也是有底线的" @load="onLoad">
+          <!-- immediate-check关闭list加载后触发一次 load 事件 -->
+          <van-list
+            immediate-check
+            v-model="item.loading"
+            :finished="item.finished"
+            finished-text="我也是有底线的"
+            @load="onLoad"
+          >
             <!-- 假设list是后台返回的数组，里有10个元素 -->
-            <div v-for="(item, index) in list" :key="index">
+            <div v-for="(subItem, subIndex) in item.list" :key="subIndex">
               <!-- 只有单张图片的 -->
-              <!-- <PostItem1 /> -->
-              {{index}}
+              <PostItem1 :data="subItem" v-if="subItem.type==1&&subItem.cover.length<3" />
+              <!-- 大于等于3张图片的组件 -->
+              <PostItem2 :data="subItem" v-if="subItem.type==1&&subItem.cover.length>=3" />
+              <!-- 视频的列表组件 -->
+              <PostItem3 :data="subItem" v-if="subItem.type==2" />
             </div>
           </van-list>
         </van-pull-refresh>
@@ -48,9 +58,9 @@ export default {
     return {
       categories: [],
       active: 0,
-      list: [],
-      loading: false,
-      finished: false,
+      // list: [],
+      // loading: false,
+      // finished: false,
       refreshing: false,
       token: ""
       // categoryId: 999
@@ -81,7 +91,7 @@ export default {
     //获取本地的栏目数据
 
     const categories = JSON.parse(localStorage.getItem("categories"));
-    console.log(categories);
+    // console.log(categories);
     //如果token有值，说明当前是登录状态
     if (categories) {
       //如果是登录状态，但是栏目第一项不是‘关注’，需要重新请求栏目数据
@@ -94,13 +104,26 @@ export default {
       } else {
         //如果在登录状态下，本地有数据或者非登录状态下本地有数据就要把本地数据传给data直接渲染
         this.categories = categories;
+        this.handleCategories();
       }
     } else {
       this.getCategories();
     }
     // this.getCategories();
+    this.getList();
   },
   methods: {
+    handleCategories() {
+      this.categories = this.categories.map(v => {
+        v.pageIndex = 1;
+        v.list = [];
+        v.finished = false;
+        v.loading = false;
+        return v;
+        // console.log(v);
+      });
+      // console.log(this.categories);
+    },
     //封装一个请求栏目数据的函数getCategories
     getCategories() {
       const config = {
@@ -121,28 +144,46 @@ export default {
         this.categories = data;
         //保存到本地存储
         // localStorage.setItem("categories", JSON.stringify(data));
-        console.log(data);
+        // console.log(data);
         localStorage.setItem("categories", JSON.stringify(data));
         // console.log(localStorage.getItem("categories"));
+        this.handleCategories();
+      });
+    },
+    //请求文章的列表函数封装
+    getList() {
+      const { id, pageIndex, finished, list, loading } = this.categories[
+        this.active
+      ];
+      // 如果数据加载到最后一页了
+      if (finished) return;
+      const config = {
+        url: "post",
+        params: {
+          pageIndex,
+          pageSize: 5,
+          category: id
+        }
+      };
+      this.$axios(config).then(res => {
+        // console.log(res);
+        const { data, total } = res.data;
+        this.categories[this.active].list = [
+          ...this.categories[this.active].list,
+          ...data
+        ];
+        this.categories = [...this.categories];
+        //告诉组件请求完毕
+        this.categories[this.active].loading = false;
+        if (this.categories[this.active].list.length === total) {
+          this.categories[this.active].finished = true;
+        }
+        // console.log(this.categories[this.active].list.length, total);
       });
     },
     onLoad() {
-      console.log("已经拖动到了底部");
-      // 异步更新数据
-      // setTimeout 仅做示例，真实场景中一般为 ajax 请求
-      setTimeout(() => {
-        for (let i = 0; i < 10; i++) {
-          this.list.push(1);
-        }
-
-        // 加载状态结束
-        this.loading = false;
-
-        // 数据全部加载完成
-        if (this.list.length >= 40) {
-          this.finished = true;
-        }
-      }, 5000);
+      this.categories[this.active].pageIndex += 1;
+      this.getList();
     },
     onRefresh() {
       // 表示加载完毕
