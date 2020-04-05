@@ -12,6 +12,7 @@ const routes = [
   { path: '/follow', component: () => import("@/views/Follow"), meta: { authorization: true } },
   { path: '/comment', component: () => import("@/views/Comment"), meta: { authorization: true } },
   { path: '/star', component: () => import("@/views/Star"), meta: { authorization: true } },
+  { path: '/category', component: () => import("@/views/Category") },
 
 
 ]

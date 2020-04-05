@@ -72,7 +72,7 @@ export default {
     active() {
       // 判断如果点击的是最后一个图标，跳转到栏目管理页
       if (this.active === this.categories.length - 1) {
-        this.$router.push("/栏目管理");
+        this.$router.push("/category");
       }
       this.getList();
       //需要等文章列表数据渲染完成再滚动
