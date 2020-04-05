@@ -74,6 +74,7 @@ export default {
       if (this.active === this.categories.length - 1) {
         this.$router.push("/栏目管理");
       }
+      this.getList();
     }
   },
   components: {
@@ -119,6 +120,7 @@ export default {
         v.list = [];
         v.finished = false;
         v.loading = false;
+        v.iload = false;
         return v;
         // console.log(v);
       });
@@ -152,9 +154,18 @@ export default {
     },
     //请求文章的列表函数封装
     getList() {
-      const { id, pageIndex, finished, list, loading } = this.categories[
-        this.active
-      ];
+      const {
+        id,
+        pageIndex,
+        finished,
+        list,
+        loading,
+        isload,
+        name
+      } = this.categories[this.active];
+      if (isload) return; //如果当前正在加载，直接返回，即等待上一次请求完成再加载
+      this.categories[this.active].isload = true;
+      this.categories[this.active].pageIndex += 1;
       // 如果数据加载到最后一页了
       if (finished) return;
       const config = {
@@ -165,6 +176,9 @@ export default {
           category: id
         }
       };
+      if (name === "关注") {
+        config.headers = { Authorization: this.token };
+      }
       this.$axios(config).then(res => {
         // console.log(res);
         const { data, total } = res.data;
@@ -179,10 +193,10 @@ export default {
           this.categories[this.active].finished = true;
         }
         // console.log(this.categories[this.active].list.length, total);
+        this.categories[this.active].isload = false;
       });
     },
     onLoad() {
-      this.categories[this.active].pageIndex += 1;
       this.getList();
     },
     onRefresh() {

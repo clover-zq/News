@@ -13,6 +13,10 @@ Vue.prototype.$axios = axios;
 
 // 给axios添加基准路径，添加完了之后请求的url就会拼接这个地址
 axios.defaults.baseURL = "http://localhost:3000";
+// axios.defaults.baseURL = "http://192.168.31.94:3000/";
+// axios.defaults.baseURL = "http://hmtoutiao-api.atlansic.com";
+// axios.defaults.baseURL = "http://127.0.0.1:3000/";
+
 
 Vue.use(Vant);
 
