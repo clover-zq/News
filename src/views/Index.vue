@@ -12,7 +12,7 @@
       </router-link>
     </div>
     <!-- tab栏切换 -->
-    <van-tabs v-model="active" sticky swipeable>
+    <van-tabs v-model="active" sticky swipeable @scroll="handleScroll">
       <van-tab v-for="(item, index) in categories" :key="index" :title="item.name">
         <!-- <div>
           <p>内容 {{ index }}</p>
@@ -75,6 +75,10 @@ export default {
         this.$router.push("/栏目管理");
       }
       this.getList();
+      //需要等文章列表数据渲染完成再滚动
+      setTimeout(() => {
+        window.scrollTo(0, this.categories[this.active].scrollY);
+      }, 10);
     }
   },
   components: {
@@ -111,7 +115,6 @@ export default {
       this.getCategories();
     }
     // this.getCategories();
-    this.getList();
   },
   methods: {
     handleCategories() {
@@ -121,9 +124,11 @@ export default {
         v.finished = false;
         v.loading = false;
         v.iload = false;
+        v.scrollY = 0;
         return v;
         // console.log(v);
       });
+      this.getList();
       // console.log(this.categories);
     },
     //封装一个请求栏目数据的函数getCategories
@@ -199,6 +204,15 @@ export default {
     onLoad() {
       this.getList();
     },
+
+    //监听tab滚动条高度的事件
+    handleScroll(data) {
+      if (this.categories.length === 0) return;
+      const { scrollTop } = data;
+      // console.log(scrollTop);
+      this.categories[this.active].scrollY = scrollTop;
+    },
+
     onRefresh() {
       // 表示加载完毕
       this.refreshing = false;
